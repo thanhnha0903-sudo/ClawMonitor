@@ -1,0 +1,10 @@
+django==4.2
+django-jazzmin
+dj-database-url
+psycopg2-binary
+django-import-export
+redis
+requests
+pandas
+openpyxl
+Pillow

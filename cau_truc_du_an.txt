@@ -1,0 +1,69 @@
+/home/truonghong/ClawMonitor
+├── backend
+│   ├── Dockerfile
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── floorplans
+│   │   └── z7077398152273_8381aa36c4dc4601b4a997843cdc2177.jpg
+│   ├── manage.py
+│   ├── media
+│   │   └── floorplans
+│   │       ├── BANVE.png
+│   │       ├── BANVE_k1zhp5B.png
+│   │       ├── BANVE_m2m0quM.png
+│   │       ├── SODO.png
+│   │       ├── SODO_JC1Ahhx.png
+│   │       ├── SODO_ajJQiCS.png
+│   │       ├── TONG_THE.png
+│   │       ├── XUONG_1.png
+│   │       ├── XUONG_2.png
+│   │       ├── z7077398150607_0afa7bf3b97926ff61a50001b218a915.jpg
+│   │       └── z7077398152273_8381aa36c4dc4601b4a997843cdc2177.jpg
+│   ├── monitor
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── management
+│   │   │   ├── __init__.py
+│   │   │   └── commands
+│   │   │       ├── __init__.py
+│   │   │       └── ping_worker.py
+│   │   ├── middleware.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   ├── 0002_company_floor_plan.py
+│   │   │   ├── 0003_remove_device_parent_device_device_uplink_and_more.py
+│   │   │   ├── 0004_device_is_demo.py
+│   │   │   ├── 0005_company_viewers.py
+│   │   │   ├── 0006_remove_device_local_port_device_device_port.py
+│   │   │   ├── 0007_device_waypoints.py
+│   │   │   ├── 0008_remove_company_telegram_chat_id_and_more.py
+│   │   │   ├── 0009_floorplan_device_floorplan.py
+│   │   │   ├── 0010_alter_company_options_alter_device_options_and_more.py
+│   │   │   ├── 0011_userdashboard.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── templates
+│   │   │   └── monitor
+│   │   │       ├── login.html
+│   │   │       └── map.html
+│   │   ├── tests.py
+│   │   ├── utils.py
+│   │   └── views.py
+│   └── requirements.txt
+├── cau_truc_du_an.txt
+├── data
+│   └── db  [error opening dir]
+├── docker-compose.yml
+├── frontend
+├── media
+├── nginx
+│   └── conf
+│       └── default.conf
+└── redis_data
+
+19 directories, 48 files

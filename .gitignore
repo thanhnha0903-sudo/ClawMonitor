@@ -1,0 +1,12 @@
+# Bỏ qua cấu hình riêng của từng máy
+core/settings.py
+
+# Bỏ qua dữ liệu Database và Cache
+data/
+redis_data/
+
+# Bỏ qua file rác của Python và môi trường ảo
+__pycache__/
+*.pyc
+venv/
+.env

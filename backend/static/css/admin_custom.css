@@ -1,0 +1,343 @@
+/* ====================================================
+   1. GIAO DIỆN TRANG ĐĂNG NHẬP (NEON CYBERPUNK)
+==================================================== */
+body.login {
+    background-color: #16161a !important;
+}
+body.login .login-box {
+    width: 450px !important;
+}
+body.login .card {
+    background: #1a1a1d !important;
+    border: 1px solid #00e5ff !important;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4), inset 0 0 10px rgba(0, 229, 255, 0.1) !important;
+    border-radius: 12px;
+}
+body.login .login-logo a {
+    color: #00e5ff !important;
+    font-weight: 900 !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(0, 229, 255, 0.8);
+    font-size: 32px;
+}
+body.login .btn-primary {
+    background: #80ffff !important; /* Màu Cyan sáng */
+    color: #000 !important;
+    border: none !important;
+    font-weight: 900;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(128, 255, 255, 0.6) !important;
+    transition: 0.3s;
+}
+body.login .btn-primary:hover {
+    box-shadow: 0 0 25px rgba(128, 255, 255, 0.9) !important;
+    transform: scale(1.02);
+}
+
+/* ====================================================
+   2. HIỆU ỨNG ĐÈN NEON CHO CÁC NÚT BẤM (TRANG ADMIN)
+==================================================== */
+.btn { transition: 0.2s; }
+/* Nút Sửa / Info (Xanh biển) */
+.btn-info {
+    background-color: #00e5ff !important; border: none !important; color: #000 !important; font-weight: bold;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.5) !important;
+}
+.btn-info:hover { box-shadow: 0 0 15px rgba(0, 229, 255, 0.9) !important; }
+
+/* Nút Xóa (Đỏ) */
+.btn-danger {
+    background-color: #ff1744 !important; border: none !important;
+    box-shadow: 0 0 8px rgba(255, 23, 68, 0.5) !important;
+}
+.btn-danger:hover { box-shadow: 0 0 15px rgba(255, 23, 68, 0.9) !important; }
+
+/* Nút Add / Success (Xanh lá) */
+.btn-success {
+    background-color: #00e676 !important; border: none !important; color: #000 !important; font-weight: bold;
+    box-shadow: 0 0 8px rgba(0, 230, 118, 0.5) !important;
+}
+.btn-success:hover { box-shadow: 0 0 15px rgba(0, 230, 118, 0.9) !important; }
+
+/* ====================================================
+   3. BỐ CỤC DANH SÁCH & BỘ LỌC TÌM KIẾM
+==================================================== */
+/* Thu nhỏ và Căn giữa cột Trạng Thái */
+th.column-is_online, td.field-is_online {
+    width: 80px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+td.field-is_online img {
+    margin: 0 auto;
+    display: block;
+}
+
+/* Biến thanh công cụ (Tìm kiếm & Add/Export) nằm trên cùng 1 hàng hoặc gần nhau */
+#changelist .row > .col-12 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+/* Ép thanh tìm kiếm (chứa dropdown) gọn lại */
+#changelist-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0 !important;
+}
+/* Đẩy cụm nút Import/Export/Add sang góc phải */
+.object-tools {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    display: flex;
+    gap: 8px;
+}
+
+/* ====================================================
+   4. DARK THEME & NEON CHO TOÀN BỘ BẢNG (TABLES)
+==================================================== */
+/* Đổi màu nền chính của trang */
+.content-wrapper, .main-footer, .card {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+}
+
+/* Nền thẻ Card chứa bảng */
+.card {
+    background: #1a1a1d !important;
+    border: 1px solid #00e5ff !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.1) !important;
+}
+
+/* Định dạng Bảng danh sách */
+table.table {
+    color: #fff !important;
+}
+table.table thead th {
+    background-color: #16161a !important;
+    color: #00e5ff !important;
+    border-bottom: 2px solid #00e5ff !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+table.table tbody tr {
+    border-bottom: 1px solid #333 !important;
+    background-color: #1a1a1d !important;
+}
+table.table tbody tr:hover {
+    background-color: rgba(0, 229, 255, 0.1) !important;
+}
+
+/* Định dạng các Link text trong bảng (VD: Username) */
+table.table td a {
+    color: #80ffff !important;
+    font-weight: bold;
+    transition: 0.2s;
+}
+table.table td a:hover {
+    color: #00e5ff !important;
+    text-shadow: 0 0 8px #00e5ff;
+}
+
+/* Fix màu chữ cho các ô lọc dropdown ở trên cùng */
+select.form-control, input.form-control {
+    background-color: #222 !important;
+    color: #00e5ff !important;
+    border: 1px solid #555 !important;
+}
+
+/* ====================================================
+   5. ĐỒNG BỘ NỀN LOGIN & TỐI ƯU KHÔNG GIAN BẢNG
+==================================================== */
+/* Lấy chính xác mã màu tối từ trang Login (#16161a) phủ lên toàn bộ Admin */
+body, .content-wrapper, .main-footer, .layout-navbar-fixed .wrapper .content-wrapper {
+    background-color: #16161a !important; 
+}
+
+/* Bóp nhỏ khoảng cách (padding) của giao diện để dịch bảng sang trái */
+.content-wrapper {
+    padding: 10px !important;
+}
+.card-body {
+    padding: 10px !important;
+}
+
+/* BÓP NHỎ CÁC CỘT THÔNG TIN TRONG BẢNG */
+table.table td, table.table th {
+    padding: 8px 10px !important; /* Giảm khoảng cách giữa các chữ */
+    font-size: 14px; /* Thu nhỏ chữ một chút để tiết kiệm diện tích */
+    vertical-align: middle !important;
+    white-space: nowrap !important; /* Ép không cho rớt dòng ở cột Username/Email */
+}
+
+/* Đảm bảo cột Thao Tác đủ rộng để chứa 3 nút */
+th.column-action_buttons, td.field-action_buttons {
+    min-width: 260px !important;
+    width: 260px !important;
+}
+
+/* ====================================================
+   6. HIỆU ỨNG GLOW NEON KHI RÊ CHUỘT VÀO TAB (MENU)
+==================================================== */
+/* Hiệu ứng mượt mà khi hover vào các mục ở Menu bên trái */
+.nav-sidebar .nav-item .nav-link {
+    transition: all 0.3s ease-in-out;
+    border-left: 3px solid transparent; /* Chuẩn bị sẵn viền trái vô hình */
+}
+
+.nav-sidebar .nav-item .nav-link:hover {
+    background-color: rgba(0, 229, 255, 0.1) !important; /* Nền xanh nhạt */
+    color: #00e5ff !important; /* Chữ sáng lên */
+    border-left: 3px solid #00e5ff !important; /* Hiện gạch viền trái */
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8); /* Chữ đổ bóng Neon */
+    padding-left: 20px !important; /* Thụt vào một xíu tạo cảm giác nhấn */
+}
+
+/* Hiệu ứng Hover cho các hàng trong bảng dữ liệu */
+table.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+table.table tbody tr:hover {
+    background-color: rgba(0, 229, 255, 0.08) !important;
+    box-shadow: inset 3px 0 0 #00e5ff; /* Sáng một viền nhỏ bên trái hàng đang trỏ */
+}
+
+/* ====================================================
+   7. VẼ CÂY THƯ MỤC (DẠNG NHÁNH L) CHO MENU CON
+==================================================== */
+a.nav-link[href*="company__id__exact"] {
+    border-left: none !important; /* Xóa gạch đứt cũ */
+    position: relative;
+    margin-left: 20px !important;
+    padding-left: 20px !important;
+}
+/* Vẽ nhánh cây */
+a.nav-link[href*="company__id__exact"]::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: 0;
+    width: 12px;
+    height: 30px;
+    border-left: 1px solid #00e5ff; /* Cột dọc */
+    border-bottom: 1px solid #00e5ff; /* Cột ngang */
+    border-bottom-left-radius: 4px; /* Bo góc cho mượt */
+}
+
+/* ====================================================
+   8. ÉP MÀU NỀN SÁNG CHO Ô TÌM KIẾM VÀ BẢNG
+==================================================== */
+/* Sửa ô Search đang bị đen ngòm */
+#changelist-search input[type="text"] {
+    background-color: #2a2b36 !important; /* Màu xám sáng */
+    color: #fff !important;
+    border: 1px solid #555 !important;
+}
+#changelist-search input[type="text"]:focus {
+    border-color: #00e5ff !important;
+    box-shadow: 0 0 5px rgba(0, 229, 255, 0.5) !important;
+}
+
+/* Ép buộc màu nền sáng (#2a2b36) và (#2f303d) xen kẽ đè lên Jazzmin */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #2a2b36 !important;
+}
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #2f303d !important;
+}
+/* Bắt buộc các ô (td) phải trong suốt để nhìn thấy màu nền của Hàng (tr) */
+table.table tbody tr td {
+    background-color: transparent !important; 
+    color: #e0e0e0 !important;
+    border-top: none !important;
+    border-bottom: 1px solid #1a1a1d !important;
+}
+
+/* Hiệu ứng Hover mạnh hơn */
+table.table tbody tr:hover, table.table tbody tr:hover td {
+    background-color: rgba(0, 229, 255, 0.12) !important;
+    color: #fff !important;
+}
+
+/* ====================================================
+   9. BÓP NHỎ CỘT TRẠNG THÁI VÀ NÚT CLIENT
+==================================================== */
+/* Cột Trạng Thái (Thường chứa icon tick xanh/đỏ) */
+th.column-get_is_online_status, td.field-get_is_online_status {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+    text-align: center !important;
+}
+
+/* Nút Cấu hình Client (Ép thu nhỏ lại) */
+td .btn-success {
+    padding: 3px 6px !important;
+    font-size: 12px !important;
+}
+
+/* ====================================================
+   10. ÉP BẢNG SÁT LỀ TRÁI VÀ MỞ RỘNG DIỆN TÍCH
+==================================================== */
+/* Bỏ các lề thừa của khung chứa bên trái */
+.content-wrapper > .content > .container-fluid {
+    padding-left: 0 !important;
+}
+.card {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+/* Thu hẹp viền trái của toàn bộ khu vực làm việc */
+@media (min-width: 992px) {
+    .content-wrapper {
+        padding-left: 10px !important; 
+    }
+}
+
+/* ====================================================
+   11. BÓP NHỎ VÀ CĂN GIỮA CÁC CỘT "STATUS"
+==================================================== */
+/* Áp dụng chung cho cột Status của Thiết bị và User */
+th.column-get_is_online_status, td.field-get_is_online_status,
+th.column-get_online_status, td.field-get_online_status {
+    width: 65px !important;
+    min-width: 65px !important;
+    max-width: 65px !important;
+    text-align: center !important; /* Ép chữ/icon ra giữa */
+    vertical-align: middle !important;
+}
+
+/* Bắt buộc Icon tick xanh/đỏ nằm chính giữa ô */
+td.field-get_is_online_status img,
+td.field-get_online_status img {
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+/* Bóp nhỏ nhẹ cột ID Telegram (Email) để nhường chỗ */
+th.column-get_telegram_id, td.field-get_telegram_id {
+    width: 180px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* ====================================================
+   12. SỬA LỖI CHỮ DIỄN GIẢI BỊ CHÌM TRONG NỀN ĐEN
+==================================================== */
+.help, .help-block, p.help, .form-group .text-muted {
+    color: #b0bec5 !important; /* Màu xám sáng / trắng nhạt */
+    font-size: 0.9em !important;
+    margin-top: 5px;
+    display: block;
+}
+/* Nhấn mạnh chữ diễn giải của checkbox (Active, Staff status...) */
+.checkbox-row p.help {
+    color: #80ffff !important; /* Đổi màu Cyan nhạt cho đồng bộ Cyberpunk */
+    font-style: italic;
+}

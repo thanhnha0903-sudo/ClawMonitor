@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập NOC Dashboard</title>
+    <style>
+        body { background-color: #1a1a1a; color: white; font-family: 'Segoe UI', Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: #222; padding: 40px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); width: 300px; text-align: center; border: 1px solid #00ffff; }
+        h2 { margin-top: 0; color: #00ffff; letter-spacing: 2px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #555; border-radius: 5px; background: #111; color: white; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #00ffff; }
+        button { width: 100%; padding: 12px; background: #00ffff; color: black; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 15px; transition: 0.2s; }
+        button:hover { background: #00cccc; box-shadow: 0 0 10px #00ffff; }
+        .error { color: #ff4d4f; font-size: 13px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>NOC DASHBOARD</h2>
+        {% if form.errors %}
+        <div class="error">⚠️ Tài khoản hoặc mật khẩu không đúng!</div>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Tên đăng nhập" required autofocus>
+            <input type="password" name="password" placeholder="Mật khẩu" required>
+            <button type="submit">ĐĂNG NHẬP</button>
+            <input type="hidden" name="next" value="{{ next }}">
+        </form>
+    </div>
+</body>
+</html>

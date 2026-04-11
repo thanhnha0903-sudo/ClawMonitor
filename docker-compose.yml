@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Cơ sở dữ liệu
+  db:
+    image: postgres:15-alpine
+    container_name: claw_db
+    restart: always
+    environment:
+      POSTGRES_DB: clawmonitor_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: StrongPassword123
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+
+  # Bộ nhớ đệm
+  redis:
+    image: redis:alpine
+    container_name: claw_redis
+    restart: always
+
+  # Backend (Python/Django)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: claw_backend
+    restart: always
+    working_dir: /app
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./backend:/app
+    command: python manage.py runserver 0.0.0.0:7000
+    environment:
+      DATABASE_URL: postgres://admin:StrongPassword123@db:5432/clawmonitor_db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "7001:7000"
+
+  # Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: claw_nginx
+    restart: always
+    ports:
+      - "1989:80"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./backend/static:/app/static
+      - ./backend/media:/app/media
