@@ -30,7 +30,7 @@ class CompanyAdmin(admin.ModelAdmin):
     def view_map_button(self, obj):
         url = reverse('map_view', args=[obj.id])
         return format_html(
-            '<a class="btn btn-sm" style="background-color: #417690; color: white;" href="{}" target="_blank"><i class="fas fa-map-marked-alt"></i> Giám sát</a>',
+            '<a class="btn btn-sm" style="background-color: #417690; color: white;" href="{}" target="_blank"><i class="fas fa-map"></i> Giám sát</a>',
             url
         )
     view_map_button.short_description = "Giám sát"
@@ -38,7 +38,7 @@ class CompanyAdmin(admin.ModelAdmin):
     def download_server_button(self, obj):
         url = reverse('export_server_config', args=[obj.id])
         return format_html(
-            '<a class="btn btn-sm" style="background-color: #ba2121; color: white;" href="{}/"><i class="fas fa-download"></i> Server Quét</a>', 
+            '<a class="btn btn-sm" style="background-color: #ba2121; color: white;" href="{}"><i class="fas fa-download"></i> Server</a>',
             url
         )
     download_server_button.short_description = "Cấu hình Server"
@@ -82,7 +82,7 @@ class FloorplanAdmin(admin.ModelAdmin):
 # ==========================================
 @admin.register(Device)
 class DeviceAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'ip_address', 'device_type', 'company', 'get_floorplan_name', 'get_is_online_status', 'cpu_usage', 'ram_usage', 'download_client_button', 'actions_column')
+    list_display = ('name', 'ip_address', 'device_type', 'company', 'get_floorplan_name', 'get_is_online_status', 'actions_column', 'download_client_button')
     list_filter = ('company', 'floorplan', 'device_type', 'is_online')
     search_fields = ('name', 'ip_address')
     ordering = ('-last_seen',)
@@ -96,7 +96,6 @@ class DeviceAdmin(ImportExportModelAdmin):
         return "-"
     get_floorplan_name.short_description = "Khu vực"
 
-    # DÀNH RIÊNG CHO THIẾT BỊ: Lấy trạng thái thiết bị từ DB
     def get_is_online_status(self, obj):
         return obj.is_online
     get_is_online_status.short_description = "Status"
@@ -125,7 +124,7 @@ class DeviceAdmin(ImportExportModelAdmin):
         if obj.device_type and any(t in obj.device_type.lower() for t in valid_types):
             url = reverse('export_client_config', args=[obj.id])
             return format_html(
-                '<a class="btn btn-sm btn-success" style="color: white;" href="/api/download-client/{}/"><i class="fas fa-download"></i> Client</a>', 
+                '<a class="btn btn-sm btn-success" style="color: white;" href="{}"><i class="fas fa-download"></i> Client</a>',
                 url
             )
         return format_html('<span style="color: #999;">-</span>')
@@ -145,7 +144,6 @@ class UserDashboardAdmin(admin.ModelAdmin):
         return obj.email if obj.email else "-"
     get_telegram_id.short_description = "ID Telegram"
 
-    # DÀNH RIÊNG CHO USER: Check Cache xem User có đang lướt web không
     def get_online_status(self, obj):
         cache_key = f'seen_{obj.username}'
         is_online = cache.get(cache_key) is not None
@@ -166,7 +164,7 @@ class UserDashboardAdmin(admin.ModelAdmin):
 
         return format_html(
             '<div style="display: flex; gap: 5px; flex-wrap: nowrap; justify-content: flex-start;">'
-            '<a class="btn btn-sm btn-warning" style="color:black; font-weight:bold;" href="{}"><i class="fas fa-key"></i> M.Khẩu</a>'
+            '<a class="btn btn-sm btn-warning" style="color:black; font-weight:bold;" href="{}"><i class="fas fa-key"></i> Đổi Pass</a>'
             '<a class="btn btn-sm btn-info" style="color:white; font-weight:bold;" href="{}"><i class="fas fa-edit"></i> Sửa</a>'
             '</div>',
             pwd_url, edit_url

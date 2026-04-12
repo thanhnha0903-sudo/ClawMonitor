@@ -10,42 +10,42 @@
         body { background-color: #121212; color: #fff; margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
         /* Menu Header */
-        .header { padding: 10px 20px; background: #1a1a24; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; z-index: 1000; position: relative; }
+        .header { padding: 10px 20px; background: #1a1a24; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
 
         /* Khu vực bản đồ chống tràn tuyệt đối */
-        #map-wrapper { position: relative; width: 100vw; height: calc(100vh - 65px); overflow: hidden; background: #121212; display: flex; justify-content: center; align-items: center; }
-        #map-container { position: relative; display: inline-block; max-width: 100%; max-height: 100%; box-shadow: 0 0 30px rgba(0,0,0,0.9); border-radius: 6px; overflow: hidden; }
+        #map-wrapper { position: relative; width: 100vw; height: calc(100vh - 65px); overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        #map-container { position: relative; display: inline-block; max-width: 100%; max-height: 100%; }
         #bg-image { display: block; max-width: 100%; max-height: calc(100vh - 70px); object-fit: contain; }
         #line-canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 5; }
 
         /* Icon thiết bị */
-        .device-node { position: absolute; transform: translate(-50%, -50%); cursor: grab; z-index: 10; display: flex; flex-direction: column; align-items: center; }
+        .device-node { position: absolute; transform: translate(-50%, -50%); cursor: grab; z-index: 10; }
         .device-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; transition: transform 0.2s; }
         .device-icon:hover { transform: scale(1.3); }
 
         /* Hiệu ứng nhấp nháy Online & Offline */
         .status-online { background-color: #00e676; animation: pulse-online 1.5s infinite alternate; }
-        @keyframes pulse-online { 0% { box-shadow: 0 0 5px #00e676, inset 0 0 5px #00e676; transform: scale(1); } 100% { box-shadow: 0 0 20px #00e676, inset 0 0 10px #00e676; transform: scale(1.1); } }
+        @keyframes pulse-online { 0% { box-shadow: 0 0 5px #00e676, inset 0 0 5px #00e676; transform: scale(1); } 100% { box-shadow: 0 0 15px #00e676, inset 0 0 8px #00e676; transform: scale(1.1); } }
         .status-offline { background-color: #ff1744; animation: pulse-offline 1s infinite alternate; }
-        @keyframes pulse-offline { 0% { box-shadow: 0 0 5px #ff1744; opacity: 1; } 100% { box-shadow: 0 0 25px #ff1744; opacity: 0.4; } }
+        @keyframes pulse-offline { 0% { box-shadow: 0 0 5px #ff1744; opacity: 1; } 100% { box-shadow: 0 0 20px #ff1744; opacity: 0.7; } }
 
         /* Tên thiết bị trên bản đồ */
-        .device-label { background: rgba(0,0,0,0.8); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-top: 5px; white-space: nowrap; pointer-events: none; }
-        .waypoint { position: absolute; width: 12px; height: 12px; background: #ffc107; border-radius: 50%; transform: translate(-50%, -50%); cursor: crosshair; z-index: 15; border: 2px solid #000; }
+        .device-label { background: rgba(0,0,0,0.8); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; white-space: nowrap; margin-top: 5px; position: absolute; left: 50%; transform: translateX(-50%); transition: opacity 0.3s; pointer-events: none; }
+        .waypoint { position: absolute; width: 12px; height: 12px; background: #ffc107; border-radius: 50%; transform: translate(-50%, -50%); cursor: grab; z-index: 11; border: 2px solid #000; }
 
         /* TOOLTIP NEON ĐỔ BÓNG */
-        .custom-tooltip { position: fixed; display: none; background: #16161a; color: #e0e0e0; padding: 15px; border-radius: 10px; pointer-events: none; z-index: 9999; font-size: 13px; min-width: 260px; border: 1px solid #00e5ff; box-shadow: 0 0 20px rgba(0, 229, 255, 0.4), inset 0 0 10px rgba(0, 229, 255, 0.1); }
-        .custom-tooltip h6 { margin: 0 0 12px 0; font-weight: bold; color: #00e5ff; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 8px #00e5ff; text-align: center; }
-        .info-line { display: flex; justify-content: space-between; align-items: center; margin: 4px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 4px; }
+        .custom-tooltip { position: fixed; display: none; background: #16161a; color: #e0e0e0; padding: 15px; border-radius: 8px; border: 1px solid #333; z-index: 9999; min-width: 280px; box-shadow: 0 0 20px rgba(0, 229, 255, 0.2); pointer-events: none; }
+        .custom-tooltip h6 { margin: 0 0 12px 0; font-weight: bold; color: #00e5ff; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        .info-line { display: flex; justify-content: space-between; align-items: center; margin: 4px 0; font-size: 13px; border-bottom: 1px dashed #333; padding-bottom: 4px; }
         .info-line:last-child { border-bottom: none; padding-bottom: 0; }
         .info-line .label { color: #aaa; }
-        .info-line .value { font-weight: bold; color: #fff; text-align: right; max-width: 65%; word-wrap: break-word;}
-        .connection-box { background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 6px; padding: 8px; margin-top: 10px; }
-        .connection-title { font-size: 11px; color: #00e5ff; margin-bottom: 6px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-        .highlight-gold { color: #ffea00 !important; font-size: 14px; text-shadow: 0 0 5px rgba(255, 234, 0, 0.4); }
-        .highlight-ip { color: #00e5ff !important; font-size: 14.5px !important; font-weight: 900 !important; letter-spacing: 1px; text-shadow: 0 0 8px rgba(0, 229, 255, 0.8); }
+        .info-line .value { font-weight: bold; color: #fff; text-align: right; max-width: 65%; word-break: break-all; }
+        .connection-box { background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 6px; padding: 10px; margin-top: 10px; }
+        .connection-title { font-size: 11px; color: #00e5ff; margin-bottom: 6px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .highlight-gold { color: #ffea00 !important; font-size: 14px; text-shadow: 0 0 5px rgba(255, 234, 0, 0.5); }
+        .highlight-ip { color: #00e5ff !important; font-size: 14.5px !important; font-weight: 900 !important; }
 
-        .tt-offline { border: 1px solid #ff1744 !important; box-shadow: 0 0 20px rgba(255, 23, 68, 0.5), inset 0 0 10px rgba(255, 23, 68, 0.15) !important; }
+        .tt-offline { border: 1px solid #ff1744 !important; box-shadow: 0 0 20px rgba(255, 23, 68, 0.2); }
         .tt-offline h6 { color: #ff1744 !important; text-shadow: 0 0 8px #ff1744 !important; }
         .tt-offline .connection-box { background: rgba(255, 23, 68, 0.05); border-color: rgba(255, 23, 68, 0.2); }
         .tt-offline .connection-title { color: #ff1744; }
@@ -56,7 +56,7 @@
 
     <div class="header">
         <h5 class="m-0 text-info fw-bold"><i class="bi bi-diagram-3-fill"></i> NOC - {{ company_name }}</h5>
-        
+
         <div class="d-flex align-items-center flex-wrap gap-2">
             <div class="btn-group" role="group">
                 <button type="button" id="btn-zone-all" class="btn btn-secondary btn-sm zone-btn fw-bold" 
@@ -65,19 +65,19 @@
                 </button>
                 {% for fp in floorplans %}
                 <button type="button" id="btn-zone-{{ fp.id }}" class="btn btn-outline-secondary btn-sm zone-btn fw-bold" 
-                        onclick="changeZone({{ fp.id }}, '{% if fp.bg_image %}{{ fp.bg_image.url }}{% endif %}')">
+                        onclick="changeZone('{{ fp.id }}', '{% if fp.bg_image %}{{ fp.bg_image.url }}{% endif %}')">
                     <i class="bi bi-layers"></i> {{ fp.name }}
                 </button>
                 {% endfor %}
             </div>
 
-            <select id="filter-status" class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto; cursor: pointer;" onchange="renderNodes()">
+            <select id="filter-status" class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;">
                 <option value="all">Tất cả trạng thái</option>
                 <option value="online">✅ Chỉ Online</option>
                 <option value="offline">🚨 Chỉ Offline (Lỗi)</option>
             </select>
 
-            <select id="filter-type" class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto; cursor: pointer;" onchange="renderNodes()">
+            <select id="filter-type" class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;">
                 <option value="all">Tất cả thiết bị</option>
                 <option value="CAM">📷 Camera</option>
                 <option value="FW">🛡️ Firewall</option>
@@ -87,19 +87,19 @@
                 <option value="PC">💻 PC / Máy tính</option>
             </select>
 
-            <button id="toggleNameBtn" class="btn btn-outline-light btn-sm fw-bold"><i class="bi bi-eye"></i> Tên</button>
+            <button id="toggleNameBtn" class="btn btn-outline-light btn-sm fw-bold"><i class="bi bi-fonts"></i> Tên</button>
             <button id="toggleLinesBtn" class="btn btn-warning btn-sm fw-bold text-dark"><i class="bi bi-bezier2"></i> Dây</button>
 
             {% if is_admin %}
             <button id="toggleEditModeBtn" class="btn btn-info btn-sm fw-bold text-dark"><i class="bi bi-tools"></i> Bẻ cáp: TẮT</button>
             {% endif %}
-            <a href="/logout/" class="btn btn-danger btn-sm fw-bold"><i class="bi bi-box-arrow-right"></i></a>
+            <a href="/logout/" class="btn btn-danger btn-sm fw-bold"><i class="bi bi-box-arrow-right"></i> Thoát</a>
         </div>
     </div>
 
     <div id="map-wrapper">
         <div id="map-container">
-            <img id="bg-image" src="" alt="Sơ đồ công ty" style="display: none;">
+          <img id="bg-image" src="" alt="Sơ đồ công ty" style="display: none;">
             <canvas id="line-canvas"></canvas>
             <div id="nodes-container"></div>
         </div>
@@ -120,6 +120,17 @@
         let isLineEditMode = false;
         let draggedNode = null;
         let currentZone = 'all';
+
+        // -----------------------------------------------------------------
+        // HÀM LẤY TỌA ĐỘ THÔNG MINH (Dựa vào Tab hiện tại)
+        // -----------------------------------------------------------------
+        function getCoords(device) {
+            if (currentZone === 'all') {
+                return { x: device.pos_x_overview || 0, y: device.pos_y_overview || 0 };
+            } else {
+                return { x: device.pos_x || 0, y: device.pos_y || 0 };
+            }
+        }
 
         // Toggle Name
         document.getElementById('toggleNameBtn').addEventListener('click', () => {
@@ -147,12 +158,12 @@
 
         // CHUYỂN PHÂN KHU
         window.changeZone = function(zoneId, bgImageUrl) {
-            currentZone = zoneId;
+            currentZone = String(zoneId);
             document.querySelectorAll('.zone-btn').forEach(btn => {
                 btn.classList.remove('btn-secondary');
                 btn.classList.add('btn-outline-secondary');
             });
-            const activeBtn = document.getElementById(zoneId === 'all' ? 'btn-zone-all' : `btn-zone-${zoneId}`);
+            const activeBtn = document.getElementById(currentZone === 'all' ? 'btn-zone-all' : `btn-zone-${currentZone}`);
             if (activeBtn) {
                 activeBtn.classList.remove('btn-outline-secondary');
                 activeBtn.classList.add('btn-secondary');
@@ -197,14 +208,14 @@
         // ==========================================
         function isDeviceVisible(device) {
             // 1. Lọc theo Khu vực
-            if (currentZone !== 'all' && device.floorplan_id != currentZone) return false;
+            if (currentZone !== 'all' && String(device.floorplan_id) !== currentZone) return false;
 
             // 2. Lọc theo Trạng thái (Online/Offline)
             const statusFilter = document.getElementById('filter-status').value;
             if (statusFilter === 'online' && !device.is_online) return false;
             if (statusFilter === 'offline' && device.is_online) return false;
 
-            // 3. Lọc theo Loại thiết bị (CAM, PC, SW...)
+            // 3. Lọc theo Loại thiết bị
             const typeFilter = document.getElementById('filter-type').value;
             if (typeFilter !== 'all' && device.device_type !== typeFilter) return false;
 
@@ -215,12 +226,15 @@
             nodesContainer.innerHTML = '';
             devicesData.forEach(device => {
                 // SỬ DỤNG HÀM LỌC TẠI ĐÂY
-                if (!isDeviceVisible(device)) return; 
+                if (!isDeviceVisible(device)) return;
+
+                // Lấy tọa độ tương ứng với Tab
+                const coords = getCoords(device);
 
                 const node = document.createElement('div');
                 node.className = 'device-node';
-                node.style.left = `${device.pos_x}%`;
-                node.style.top = `${device.pos_y}%`;
+                node.style.left = `${coords.x}%`;
+                node.style.top = `${coords.y}%`;
                 node.id = `device-${device.id}`;
 
                 const isOnline = device.is_online;
@@ -234,23 +248,22 @@
                 node.addEventListener('mouseenter', (e) => {
                     if (draggedNode) return;
                     customTooltip.className = `custom-tooltip ${isOnline ? '' : 'tt-offline'}`;
-                    const statusText = isOnline ? '<span class="value" style="color:#00e676;">Trực tuyến</span>' : '<span class="value" style="color:#ff1744;">Ngoại tuyến</span>';
-                    let html = `<h6><i class="bi ${isOnline ? 'bi-hdd-network' : 'bi-exclamation-triangle-fill'}"></i> ${device.name}</h6>`;
+                    const statusText = isOnline ? '<span class="value" style="color:#00e676;">Trực tuyến</span>' : '<span class="value" style="color:#ff1744;">Mất kết nối</span>';
+                    
+                    let html = `<h6><i class="bi ${isOnline ? 'bi-hdd-network' : 'bi-exclamation-triangle'}"></i> ${device.name}</h6>`;
                     html += `<div class="info-line"><span class="label">Trạng thái:</span> ${statusText}</div>`;
                     html += `<div class="info-line"><span class="label">IP:</span> <span class="value highlight-ip">${device.ip_address}</span></div>`;
-                    html += `<div class="info-line"><span class="label">Loại/CPU/RAM:</span> <span class="value">${device.device_type} | ${device.cpu_usage}% / ${device.ram_usage}%</span></div>`;
+                    html += `<div class="info-line"><span class="label">Loại/CPU/RAM:</span> <span class="value">${device.device_type} | ${device.cpu_usage}% | ${device.ram_usage}%</span></div>`;
 
-                    html += `<div class="connection-box"><div class="connection-title"><i class="bi bi-diagram-2"></i> Thông tin đấu nối</div>`;
-                    html += `<div class="info-line"><span class="label">Port Thiết bị:</span> <span class="value highlight-gold">${device.my_device_port || 'N/A'}</span></div>`;
+                    html += `<div class="connection-box"><div class="connection-title"><i class="bi bi-link-45deg"></i> Đấu nối</div>`;
+                    html += `<div class="info-line"><span class="label">Port Thiết bị:</span> <span class="value">${device.my_device_port || 'N/A'}</span></div>`;
 
                     if(device.uplink_name) {
                         html += `<div class="info-line"><span class="label">Thiết bị Cha:</span> <span class="value highlight-gold">${device.uplink_name}</span></div>`;
-                        html += `<div class="info-line"><span class="label">Port Uplink:</span> <span class="value highlight-gold">${device.uplink_port || 'N/A'}</span></div>`;
-                    } else {
-                        html += `<div class="info-line"><span class="label">Thiết bị Cha:</span> <span class="value highlight-gold">Internet / Core</span></div>`;
+                        html += `<div class="info-line"><span class="label">Port Uplink:</span> <span class="value">${device.uplink_port || 'N/A'}</span></div>`;
                     }
                     html += `</div>`;
-                    
+
                     customTooltip.innerHTML = html;
                     customTooltip.style.display = 'block';
                     positionTooltip(e);
@@ -297,31 +310,30 @@
             if (!canvas.width || !canvas.height) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (!isLineVisible) return;
-
             ctx.lineWidth = 3; ctx.setLineDash([12, 10]); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
             const drawX = (percentX) => (percentX / 100) * canvas.width;
             const drawY = (percentY) => (percentY / 100) * canvas.height;
 
             devicesData.forEach(d => {
-                // Nếu thiết bị con đang bị ẩn bởi bộ lọc, khỏi vẽ dây
                 if (!isDeviceVisible(d)) return;
-
                 if (!d.uplink_id) return;
                 const uplinkDevice = devicesData.find(dev => dev.id === d.uplink_id);
                 if (!uplinkDevice) return;
-                
-                // Nếu thiết bị cha đang bị ẩn bởi bộ lọc, cũng khỏi vẽ dây
                 if (!isDeviceVisible(uplinkDevice)) return;
 
+                // Lấy tọa độ nối dây theo Tab
+                const startCoords = getCoords(d);
+                const endCoords = getCoords(uplinkDevice);
+
                 ctx.beginPath();
-                ctx.moveTo(drawX(d.pos_x), drawY(d.pos_y));
-                ctx.strokeStyle = (!d.is_online || !uplinkDevice.is_online) ? 'rgba(255, 23, 68, 0.9)' : 'rgba(0, 180, 255, 0.9)';
+                ctx.moveTo(drawX(startCoords.x), drawY(startCoords.y));
+                ctx.strokeStyle = (!d.is_online || !uplinkDevice.is_online) ? 'rgba(255, 23, 68, 0.7)' : 'rgba(0, 229, 255, 0.7)';
 
                 if (d.waypoints && Array.isArray(d.waypoints)) {
                     d.waypoints.forEach(wp => { ctx.lineTo(drawX(wp.x), drawY(wp.y)); });
                 }
 
-                ctx.lineTo(drawX(uplinkDevice.pos_x), drawY(uplinkDevice.pos_y));
+                ctx.lineTo(drawX(endCoords.x), drawY(endCoords.y));
                 ctx.stroke();
             });
             ctx.setLineDash([]);
@@ -332,9 +344,15 @@
                 if (isLineEditMode) { addWaypoint(id); return; }
                 draggedNode = elmnt; customTooltip.style.display = 'none';
                 document.onmouseup = () => {
+                    // GỬI KÈM MÃ TAB VỀ BACKEND ĐỂ LƯU ĐÚNG CỘT
                     fetch('/api/devices/update-pos/', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id: id, x: parseFloat(elmnt.style.left) || 0, y: parseFloat(elmnt.style.top) || 0 })
+                        body: JSON.stringify({ 
+                            id: id, 
+                            floorplan_id: currentZone, // <-- Biến phân luồng
+                            x: parseFloat(elmnt.style.left) || 0, 
+                            y: parseFloat(elmnt.style.top) || 0 
+                        })
                     });
                     document.onmouseup = null; document.onmousemove = null; draggedNode = null;
                 };
@@ -343,8 +361,18 @@
                     let x = ((e.clientX - rect.left) / rect.width) * 100;
                     let y = ((e.clientY - rect.top) / rect.height) * 100;
                     elmnt.style.left = `${Math.max(0, Math.min(100, x))}%`; elmnt.style.top = `${Math.max(0, Math.min(100, y))}%`;
+                    
                     const dev = devicesData.find(d => d.id === id);
-                    if(dev) { dev.pos_x = x; dev.pos_y = y; }
+                    if(dev) { 
+                        // Cập nhật lại mảng local để không bị giật lag
+                        if (currentZone === 'all') {
+                            dev.pos_x_overview = x; 
+                            dev.pos_y_overview = y;
+                        } else {
+                            dev.pos_x = x; 
+                            dev.pos_y = y;
+                        }
+                    }
                     drawLines();
                 };
             };
@@ -373,7 +401,12 @@
             if (dev && dev.uplink_id) {
                 const upDev = devicesData.find(d => d.id === dev.uplink_id);
                 if (upDev) {
-                    const midX = (dev.pos_x + upDev.pos_x) / 2; const midY = (dev.pos_y + upDev.pos_y) / 2;
+                    // Tính trung điểm neo dựa vào tọa độ tab hiện tại
+                    const devCoords = getCoords(dev);
+                    const upDevCoords = getCoords(upDev);
+                    const midX = (devCoords.x + upDevCoords.x) / 2; 
+                    const midY = (devCoords.y + upDevCoords.y) / 2;
+
                     if (!dev.waypoints || !Array.isArray(dev.waypoints)) dev.waypoints = [];
                     dev.waypoints.push({ x: midX, y: midY });
                     saveWaypoints(dev.id, dev.waypoints); renderNodes();

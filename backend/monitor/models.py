@@ -79,7 +79,10 @@ class Device(models.Model):
     # --- TỌA ĐỘ BẢN VẼ ---
     pos_x = models.FloatField(default=0.0)
     pos_y = models.FloatField(default=0.0)
-
+    # Tọa độ dùng riêng cho trang "Tất cả" (Overview)
+    pos_x_overview = models.FloatField(default=0, blank=True, null=True, verbose_name="Tọa độ X (Tất cả)")
+    pos_y_overview = models.FloatField(default=0, blank=True, null=True, verbose_name="Tọa độ Y (Tất cả)")
+    
     class Meta:
         verbose_name = "Thiết bị"
         verbose_name_plural = "Danh sách Thiết bị"
