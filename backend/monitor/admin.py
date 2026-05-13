@@ -178,7 +178,7 @@ class UserDashboardAdmin(admin.ModelAdmin):
         return actions
 
     def has_add_permission(self, request):
-        return False
+        return True
 
     def has_view_permission(self, request, obj=None):
         return request.user.is_superuser or super().has_view_permission(request, obj)

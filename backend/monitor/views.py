@@ -1,6 +1,6 @@
 import json
 from zoneinfo import ZoneInfo
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -30,8 +30,7 @@ def api_devices(request, company_id):
                 d.save()
                 admin_id = getattr(company, 'admin_telegram_id', None)
                 if admin_id and str(admin_id).strip() != "":
-                    # Đã fix lỗi cắt cụt chuỗi ở đây
-                    msg = f"🔴 <b>CẢNH BÁO MẤT KẾT NỐI</b>\nCông ty: <b>{company.name}</b>\nThiết bị: <b>{d.name}</b> ({d.ip_address}) đã mất kết nối!"
+                    msg = f"🔴 <b>CẢNH BÁO MẤT KẾT NỐI</b>\nCông ty: <b>{company.name}</b>\nThiết bị: <b>{d.name}</b>\nIP: {d.ip_address}"
                     send_telegram_alert(msg, admin_id)
 
         # 2. Xử lý Waypoints
@@ -55,9 +54,9 @@ def api_devices(request, company_id):
             'floorplan_id': getattr(d, 'floorplan_id', None),
             
             # --- TỌA ĐỘ PHÂN TÁCH ---
-            'pos_x': d.pos_x, # Tọa độ cho tab Xưởng
+            'pos_x': d.pos_x,
             'pos_y': d.pos_y,
-            'pos_x_overview': getattr(d, 'pos_x_overview', 0), # Tọa độ riêng cho tab Tất Cả
+            'pos_x_overview': getattr(d, 'pos_x_overview', 0),
             'pos_y_overview': getattr(d, 'pos_y_overview', 0), 
             
             'is_online': d.is_online,
@@ -82,8 +81,7 @@ def api_report_status(request):
             if not device.is_online and data.get('is_online', False):
                 admin_id = getattr(device.company, 'admin_telegram_id', None)
                 if admin_id and str(admin_id).strip() != "":
-                    # Đã fix lỗi cắt cụt chuỗi ở đây
-                    msg = f"🟢 <b>THIẾT BỊ ĐÃ ONLINE</b>\nCông ty: <b>{device.company.name}</b>\nThiết bị: <b>{device.name}</b> ({device.ip_address}) đã kết nối lại!"
+                    msg = f"🟢 <b>THIẾT BỊ ĐÃ ONLINE</b>\nCông ty: <b>{device.company.name}</b>\nThiết bị: <b>{device.name}</b>\nIP: {device.ip_address}"
                     send_telegram_alert(msg, admin_id)
             device.is_online = data.get('is_online', False)
             device.last_seen = timezone.now()
@@ -100,8 +98,26 @@ def api_report_status(request):
 def map_view(request, company_id):
     company = get_object_or_404(Company, id=company_id)
     floorplans = Floorplan.objects.filter(company=company)
-    if not request.user.is_superuser and company not in request.user.companies.all():
-        return HttpResponseForbidden("Bạn không có quyền xem bản đồ này.")
+    if not request.user.is_superuser:
+        try:
+            has_permission = False
+            if hasattr(request.user, 'companies'):
+                if company in request.user.companies.all():
+                    has_permission = True
+            else:
+                from .models import UserDashboard
+                try:
+                    user_dash = UserDashboard.objects.get(user=request.user)
+                except:
+                    user_dash = UserDashboard.objects.get(id=request.user.id)
+                if company in user_dash.companies.all():
+                    has_permission = True
+            
+            if not has_permission:
+                return HttpResponseForbidden("Bạn không có quyền xem bản đồ công ty này.")
+        except Exception as e:
+            return HttpResponseForbidden(f"Lỗi kiểm tra quyền: {str(e)}")
+            
     return render(request, 'monitor/map.html', {
         'is_admin': request.user.is_superuser, 
         'company_id': company.id, 
@@ -158,7 +174,6 @@ def export_client_config(request, device_id):
         "my_ip": device.ip_address, 
         "server_url": f"http://{request.get_host()}:90/api/report-status/"
     }
-    # Đã fix lỗi cắt cụt HTTPResponse
     response = HttpResponse(json.dumps(config_data, indent=4, ensure_ascii=False), content_type='application/json')
     response['Content-Disposition'] = f'attachment; filename="config_agent_{device.name}.json"'
     return response
@@ -171,7 +186,6 @@ def export_server_config(request, company_id):
         "company_name": company.name, 
         "server_url": f"http://{request.get_host()}:90/api/report-status/"
     }
-    # Đã fix lỗi cắt cụt HTTPResponse
     response = HttpResponse(json.dumps(config_data, indent=4, ensure_ascii=False), content_type='application/json')
     response['Content-Disposition'] = f'attachment; filename="config_server_{company.name}.json"'
     return response
@@ -205,3 +219,29 @@ def api_login(request):
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)}, status=400)
     return JsonResponse({"status": "error"}, status=405)
+
+@login_required(login_url='/login/')
+def dashboard_redirect(request):
+    if request.user.is_superuser:
+        return redirect('/admin/')
+    else:
+        try:
+            first_company = None
+            # Trường hợp 1: Biến companies nằm trực tiếp trong request.user
+            if hasattr(request.user, 'companies'):
+                first_company = request.user.companies.first()
+            # Trường hợp 2: Có bảng UserDashboard mở rộng (OneToOne hoặc Proxy)
+            else:
+                from .models import UserDashboard
+                try:
+                    user_dash = UserDashboard.objects.get(user=request.user)
+                except:
+                    user_dash = UserDashboard.objects.get(id=request.user.id)
+                first_company = user_dash.companies.first()
+
+            if first_company:
+                return redirect(f'/map/{first_company.id}/')
+            else:
+                return HttpResponseForbidden("Tài khoản của bạn chưa được gán vào Công ty nào.")
+        except Exception as e:
+            return HttpResponseForbidden(f"Lỗi truy xuất dữ liệu: {str(e)}")

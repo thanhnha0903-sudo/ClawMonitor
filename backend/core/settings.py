@@ -116,7 +116,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CẤU HÌNH ĐƯỜNG DẪN ĐĂNG NHẬP
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/map/1/'
+LOGIN_REDIRECT_URL = '/'
 
 # ==========================================
 # CẤU HÌNH GIAO DIỆN JAZZMIN BỔ SUNG
