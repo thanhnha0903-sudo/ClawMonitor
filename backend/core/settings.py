@@ -146,3 +146,10 @@ JAZZMIN_SETTINGS = {
         ]
     },
 }
+# Sửa trên máy DEMO:
+CSRF_TRUSTED_ORIGINS = [
+    'http://truonghong.fortiddns.com:90', 
+    'https://truonghong.fortiddns.com',
+    'http://192.168.20.252',             
+    'http://192.168.20.252:90',          
+]
