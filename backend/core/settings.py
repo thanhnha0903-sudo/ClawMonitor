@@ -148,8 +148,10 @@ JAZZMIN_SETTINGS = {
 }
 # Sửa trên máy DEMO:
 CSRF_TRUSTED_ORIGINS = [
-    'http://truonghong.fortiddns.com:90', 
+    'http://truonghong.fortiddns.com',
     'https://truonghong.fortiddns.com',
+    'http://truonghong.fortiddns.com:90',    # Cổng cho máy Main
+    'http://truonghong.fortiddns.com:1989',  # <-- THÊM DÒNG NÀY CHO MÁY DEMO
     'http://192.168.20.252',             
     'http://192.168.20.252:90',          
 ]
