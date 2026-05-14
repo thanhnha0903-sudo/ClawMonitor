@@ -1,53 +1,54 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bản đồ NOC - {{ company_name }}</title>
+    <title>{% trans "Bản đồ NOC" %} - {{ company_name }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
-        body { background-color: #121212; color: #fff; margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #121212; color: #fff; margin: 0; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
 
         /* Menu Header */
         .header { padding: 10px 20px; background: #1a1a24; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
 
         /* Khu vực bản đồ chống tràn tuyệt đối */
-        #map-wrapper { position: relative; width: 100vw; height: calc(100vh - 65px); overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        #map-container { position: relative; display: inline-block; max-width: 100%; max-height: 100%; }
+        #map-wrapper { position: relative; width: 100vw; height: calc(100vh - 65px); overflow: auto; }
+        #map-container { position: relative; display: inline-block; max-width: 100%; text-align: center; }
         #bg-image { display: block; max-width: 100%; max-height: calc(100vh - 70px); object-fit: contain; }
-        #line-canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 5; }
+        #line-canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 1; }
 
         /* Icon thiết bị */
-        .device-node { position: absolute; transform: translate(-50%, -50%); cursor: grab; z-index: 10; }
-        .device-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; transition: transform 0.2s; }
+        .device-node { position: absolute; transform: translate(-50%, -50%); cursor: grab; z-index: 2; }
+        .device-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 5px rgba(0,0,0,0.5); transition: 0.2s; }
         .device-icon:hover { transform: scale(1.3); }
 
         /* Hiệu ứng nhấp nháy Online & Offline */
-        .status-online { background-color: #00e676; animation: pulse-online 1.5s infinite alternate; }
-        @keyframes pulse-online { 0% { box-shadow: 0 0 5px #00e676, inset 0 0 5px #00e676; transform: scale(1); } 100% { box-shadow: 0 0 15px #00e676, inset 0 0 8px #00e676; transform: scale(1.1); } }
-        .status-offline { background-color: #ff1744; animation: pulse-offline 1s infinite alternate; }
-        @keyframes pulse-offline { 0% { box-shadow: 0 0 5px #ff1744; opacity: 1; } 100% { box-shadow: 0 0 20px #ff1744; opacity: 0.7; } }
+        .status-online { background-color: #00e676; animation: pulse-online 1.5s infinite; }
+        @keyframes pulse-online { 0% { box-shadow: 0 0 5px #00e676, inset 0 0 5px #00e676; } 50% { box-shadow: 0 0 15px #00e676, inset 0 0 10px #00e676; } 100% { box-shadow: 0 0 5px #00e676, inset 0 0 5px #00e676; } }
+        .status-offline { background-color: #ff1744; animation: pulse-offline 1s infinite; }
+        @keyframes pulse-offline { 0% { box-shadow: 0 0 5px #ff1744; opacity: 1; } 50% { box-shadow: 0 0 20px #ff1744; opacity: 0.8; } 100% { box-shadow: 0 0 5px #ff1744; opacity: 1; } }
 
         /* Tên thiết bị trên bản đồ */
-        .device-label { background: rgba(0,0,0,0.8); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; white-space: nowrap; margin-top: 5px; position: absolute; left: 50%; transform: translateX(-50%); transition: opacity 0.3s; pointer-events: none; }
-        .waypoint { position: absolute; width: 12px; height: 12px; background: #ffc107; border-radius: 50%; transform: translate(-50%, -50%); cursor: grab; z-index: 11; border: 2px solid #000; }
+        .device-label { background: rgba(0,0,0,0.8); color: #fff; padding: 3px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; margin-top: 5px; white-space: nowrap; pointer-events: none; }
+        .waypoint { position: absolute; width: 12px; height: 12px; background: #ffc107; border-radius: 50%; border: 2px solid #000; cursor: pointer; transform: translate(-50%, -50%); z-index: 3; }
 
         /* TOOLTIP NEON ĐỔ BÓNG */
-        .custom-tooltip { position: fixed; display: none; background: #16161a; color: #e0e0e0; padding: 15px; border-radius: 8px; border: 1px solid #333; z-index: 9999; min-width: 280px; box-shadow: 0 0 20px rgba(0, 229, 255, 0.2); pointer-events: none; }
-        .custom-tooltip h6 { margin: 0 0 12px 0; font-weight: bold; color: #00e5ff; border-bottom: 1px solid #333; padding-bottom: 8px; }
-        .info-line { display: flex; justify-content: space-between; align-items: center; margin: 4px 0; font-size: 13px; border-bottom: 1px dashed #333; padding-bottom: 4px; }
+        .custom-tooltip { position: fixed; display: none; background: rgba(22, 22, 26, 0.95); color: #fff; padding: 15px; border-radius: 8px; border: 1px solid #333; box-shadow: 0 8px 32px rgba(0,0,0,0.8); z-index: 1000; font-size: 13px; width: 280px; backdrop-filter: blur(10px); pointer-events: none; }
+        .custom-tooltip h6 { margin: 0 0 12px 0; font-weight: bold; color: #00e5ff; border-bottom: 1px solid #333; padding-bottom: 8px; font-size: 15px; text-transform: uppercase; }
+        .info-line { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #333; padding: 6px 0; }
         .info-line:last-child { border-bottom: none; padding-bottom: 0; }
         .info-line .label { color: #aaa; }
-        .info-line .value { font-weight: bold; color: #fff; text-align: right; max-width: 65%; word-break: break-all; }
-        .connection-box { background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 6px; padding: 10px; margin-top: 10px; }
+        .info-line .value { font-weight: bold; color: #fff; text-align: right; max-width: 60%; word-wrap: break-word; }
+        .connection-box { background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 6px; padding: 10px; margin-top: 12px; }
         .connection-title { font-size: 11px; color: #00e5ff; margin-bottom: 6px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         .highlight-gold { color: #ffea00 !important; font-size: 14px; text-shadow: 0 0 5px rgba(255, 234, 0, 0.5); }
-        .highlight-ip { color: #00e5ff !important; font-size: 14.5px !important; font-weight: 900 !important; }
+        .highlight-ip { color: #00e5ff !important; font-size: 14.5px !important; font-weight: bold; }
 
-        .tt-offline { border: 1px solid #ff1744 !important; box-shadow: 0 0 20px rgba(255, 23, 68, 0.2); }
+        .tt-offline { border: 1px solid #ff1744 !important; box-shadow: 0 0 20px rgba(255, 23, 68, 0.3) !important; }
         .tt-offline h6 { color: #ff1744 !important; text-shadow: 0 0 8px #ff1744 !important; }
-        .tt-offline .connection-box { background: rgba(255, 23, 68, 0.05); border-color: rgba(255, 23, 68, 0.2); }
+        .tt-offline .connection-box { background: rgba(255, 23, 68, 0.05); border-color: rgba(255, 23, 68, 0.3); }
         .tt-offline .connection-title { color: #ff1744; }
     </style>
 </head>
@@ -58,44 +59,58 @@
         <h5 class="m-0 text-info fw-bold"><i class="bi bi-diagram-3-fill"></i> NOC - {{ company_name }}</h5>
 
         <div class="d-flex align-items-center flex-wrap gap-2">
+            
+            <!-- FORM CHỌN NGÔN NGỮ (MỚI) -->
+            <form action="{% url 'set_language' %}" method="post" class="m-0 me-2">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                <select name="language" onchange="this.form.submit()" class="form-select form-select-sm bg-dark text-white" style="width: auto; border-color: #555;">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% for lang in LANGUAGES %}
+                        <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>{{ lang.1 }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+
             <div class="btn-group" role="group">
                 {% for fp in floorplans %}
-                <button type="button" id="btn-zone-{{ fp.id }}" class="btn btn-outline-secondary btn-sm zone-btn fw-bold" 
-                        onclick="changeZone('{{ fp.id }}', '{% if fp.bg_image %}{{ fp.bg_image.url }}{% endif %}')">
+                 <button type="button" id="btn-zone-{{ fp.id }}" class="btn btn-outline-secondary btn-sm zone-btn"
+                        onclick="changeZone('{{ fp.id }}', '{% if fp.bg_image %}{{ fp.bg_image.url }}{% endif %}');">
                     <i class="bi bi-layers"></i> {{ fp.name }}
                 </button>
                 {% endfor %}
             </div>
 
-            <select id="filter-status" class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;">
-                <option value="all">Tất cả trạng thái</option>
-                <option value="online">✅ Chỉ Online</option>
-                <option value="offline">🚨 Chỉ Offline (Lỗi)</option>
+            <select id="filter-status" class="form-select form-select-sm bg-dark text-white" style="width: auto; border-color: #555;">
+                <option value="all">{% trans "Tất cả trạng thái" %}</option>
+                <option value="online">✅ {% trans "Chỉ Online" %}</option>
+                <option value="offline">🚨 {% trans "Chỉ Offline (Lỗi)" %}</option>
             </select>
 
-            <select id="filter-type" class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;">
-                <option value="all">Tất cả thiết bị</option>
-                <option value="CAM">📷 Camera</option>
-                <option value="FW">🛡️ Firewall</option>
-                <option value="CSW">🎛️ Core Switch</option>
-                <option value="ASW">🔌 Access Switch</option>
-                <option value="SRV">🖥️ Server</option>
-                <option value="PC">💻 PC / Máy tính</option>
+            <select id="filter-type" class="form-select form-select-sm bg-dark text-white" style="width: auto; border-color: #555;">
+                <option value="all">{% trans "Tất cả thiết bị" %}</option>
+                <option value="CAM">📷 {% trans "Camera" %}</option>
+                <option value="FW">🛡️ {% trans "Firewall" %}</option>
+                <option value="CSW">🎛️ {% trans "Core Switch" %}</option>
+                <option value="ASW">🔌 {% trans "Access Switch" %}</option>
+                <option value="SRV">🖥️ {% trans "Server" %}</option>
+                <option value="PC">💻 {% trans "PC / Máy tính" %}</option>
             </select>
 
-            <button id="toggleNameBtn" class="btn btn-outline-light btn-sm fw-bold"><i class="bi bi-fonts"></i> Tên</button>
-            <button id="toggleLinesBtn" class="btn btn-warning btn-sm fw-bold text-dark"><i class="bi bi-bezier2"></i> Dây</button>
+            <button id="toggleNameBtn" class="btn btn-outline-light btn-sm fw-bold"><i class="bi bi-eye"></i> {% trans "Tên" %}</button>
+            <button id="toggleLinesBtn" class="btn btn-warning btn-sm fw-bold text-dark"><i class="bi bi-bezier2"></i> {% trans "Dây mạng" %}</button>
 
             {% if is_admin %}
-            <button id="toggleEditModeBtn" class="btn btn-info btn-sm fw-bold text-dark"><i class="bi bi-tools"></i> Bẻ cáp: TẮT</button>
+            <button id="toggleEditModeBtn" class="btn btn-info btn-sm fw-bold text-dark"><i class="bi bi-tools"></i> {% trans "Bẻ cáp" %}</button>
             {% endif %}
-            <a href="/logout/" class="btn btn-danger btn-sm fw-bold"><i class="bi bi-box-arrow-right"></i> Thoát</a>
+            <a href="/logout/" class="btn btn-danger btn-sm fw-bold"><i class="bi bi-box-arrow-right"></i> {% trans "Đăng xuất" %}</a>
         </div>
     </div>
 
     <div id="map-wrapper">
         <div id="map-container">
-          <img id="bg-image" src="" alt="Sơ đồ công ty" style="display: none;">
+          <img id="bg-image" src="" alt="{% trans 'Sơ đồ công ty' %}" style="display: none;">
             <canvas id="line-canvas"></canvas>
             <div id="nodes-container"></div>
         </div>
@@ -115,7 +130,8 @@
         let isLineVisible = true;
         let isLineEditMode = false;
         let draggedNode = null;
-        let currentZone = '{% if floorplans %}{{ floorplans.0.id }}{% else %}none{% endif %}';
+        let currentZone = '{% if floorplans %}{{ floorplans.0.id }}{% else %}all{% endif %}';
+        
         // -----------------------------------------------------------------
         // HÀM LẤY TỌA ĐỘ THÔNG MINH (Dựa vào Tab hiện tại)
         // -----------------------------------------------------------------
@@ -144,7 +160,7 @@
         {% if is_admin %}
         document.getElementById('toggleEditModeBtn').addEventListener('click', function() {
             isLineEditMode = !isLineEditMode;
-            this.innerHTML = isLineEditMode ? '<i class="bi bi-tools"></i> Bẻ cáp: BẬT' : '<i class="bi bi-tools"></i> Bẻ cáp: TẮT';
+            this.innerHTML = isLineEditMode ? '<i class="bi bi-tools"></i> {% trans "Bẻ cáp: BẬT" %}' : '<i class="bi bi-tools"></i> {% trans "Bẻ cáp" %}';
             this.classList.toggle('btn-info', !isLineEditMode);
             this.classList.toggle('btn-success', isLineEditMode);
             renderNodes();
@@ -158,7 +174,7 @@
                 btn.classList.remove('btn-secondary');
                 btn.classList.add('btn-outline-secondary');
             });
-            const activeBtn = document.getElementById(currentZone === 'all' ? 'btn-zone-all' : `btn-zone-${currentZone}`);
+            const activeBtn = document.getElementById(currentZone === 'all' ? 'btn-zone-all' : 'btn-zone-' + currentZone);
             if (activeBtn) {
                 activeBtn.classList.remove('btn-outline-secondary');
                 activeBtn.classList.add('btn-secondary');
@@ -237,25 +253,25 @@
 
                 node.innerHTML = `
                     <div class="device-icon ${statusClass}"></div>
-                    <div class="device-label" style="opacity: ${isNameVisible ? '1' : '0'}">${device.name}</div>
+                    <div class="device-label" style="opacity: ${isNameVisible ? '1' : '0'};">${device.name}</div>
                 `;
 
                 node.addEventListener('mouseenter', (e) => {
                     if (draggedNode) return;
                     customTooltip.className = `custom-tooltip ${isOnline ? '' : 'tt-offline'}`;
-                    const statusText = isOnline ? '<span class="value" style="color:#00e676;">Trực tuyến</span>' : '<span class="value" style="color:#ff1744;">Mất kết nối</span>';
-                    
-                    let html = `<h6><i class="bi ${isOnline ? 'bi-hdd-network' : 'bi-exclamation-triangle'}"></i> ${device.name}</h6>`;
-                    html += `<div class="info-line"><span class="label">Trạng thái:</span> ${statusText}</div>`;
-                    html += `<div class="info-line"><span class="label">IP:</span> <span class="value highlight-ip">${device.ip_address}</span></div>`;
-                    html += `<div class="info-line"><span class="label">Loại/CPU/RAM:</span> <span class="value">${device.device_type} | ${device.cpu_usage}% | ${device.ram_usage}%</span></div>`;
+                    const statusText = isOnline ? '<span class="value" style="color:#00e676;">{% trans "Đang hoạt động" %}</span>' : '<span class="value" style="color:#ff1744; animation: pulse-offline 1s infinite;">{% trans "MẤT KẾT NỐI" %}</span>';
 
-                    html += `<div class="connection-box"><div class="connection-title"><i class="bi bi-link-45deg"></i> Đấu nối</div>`;
-                    html += `<div class="info-line"><span class="label">Port Thiết bị:</span> <span class="value">${device.my_device_port || 'N/A'}</span></div>`;
+                    let html = `<h6><i class="bi ${isOnline ? 'bi-hdd-network' : 'bi-exclamation-triangle-fill'}"></i> ${device.name}</h6>`;
+                    html += `<div class="info-line"><span class="label">{% trans "Trạng thái:" %}</span> ${statusText}</div>`;
+                    html += `<div class="info-line"><span class="label">IP:</span> <span class="value highlight-ip">${device.ip_address}</span></div>`;
+                    html += `<div class="info-line"><span class="label">{% trans "Loại/CPU/RAM:" %}</span> <span class="value">${device.device_type} / ${device.cpu_usage}% / ${device.ram_usage}%</span></div>`;
+
+                    html += `<div class="connection-box"><div class="connection-title">{% trans "KẾT NỐI UPLINK" %}</div>`;
+                    html += `<div class="info-line"><span class="label">{% trans "Port Thiết bị:" %}</span> <span class="value highlight-gold">${device.my_device_port || '-'}</span></div>`;
 
                     if(device.uplink_name) {
-                        html += `<div class="info-line"><span class="label">Thiết bị Cha:</span> <span class="value highlight-gold">${device.uplink_name}</span></div>`;
-                        html += `<div class="info-line"><span class="label">Port Uplink:</span> <span class="value">${device.uplink_port || 'N/A'}</span></div>`;
+                        html += `<div class="info-line"><span class="label">{% trans "Thiết bị đích:" %}</span> <span class="value">${device.uplink_name}</span></div>`;
+                        html += `<div class="info-line"><span class="label">{% trans "Port Uplink:" %}</span> <span class="value highlight-gold">${device.uplink_port || '-'}</span></div>`;
                     }
                     html += `</div>`;
 
@@ -322,7 +338,7 @@
 
                 ctx.beginPath();
                 ctx.moveTo(drawX(startCoords.x), drawY(startCoords.y));
-                ctx.strokeStyle = (!d.is_online || !uplinkDevice.is_online) ? 'rgba(255, 23, 68, 0.7)' : 'rgba(0, 229, 255, 0.7)';
+                ctx.strokeStyle = (!d.is_online || !uplinkDevice.is_online) ? 'rgba(255, 23, 68, 0.8)' : 'rgba(0, 229, 255, 0.8)';
 
                 if (d.waypoints && Array.isArray(d.waypoints)) {
                     d.waypoints.forEach(wp => { ctx.lineTo(drawX(wp.x), drawY(wp.y)); });
@@ -342,11 +358,11 @@
                     // GỬI KÈM MÃ TAB VỀ BACKEND ĐỂ LƯU ĐÚNG CỘT
                     fetch('/api/devices/update-pos/', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            id: id, 
+                        body: JSON.stringify({
+                            id: id,
                             floorplan_id: currentZone, // <-- Biến phân luồng
-                            x: parseFloat(elmnt.style.left) || 0, 
-                            y: parseFloat(elmnt.style.top) || 0 
+                            x: parseFloat(elmnt.style.left) || 0,
+                            y: parseFloat(elmnt.style.top) || 0
                         })
                     });
                     document.onmouseup = null; document.onmousemove = null; draggedNode = null;
@@ -356,15 +372,15 @@
                     let x = ((e.clientX - rect.left) / rect.width) * 100;
                     let y = ((e.clientY - rect.top) / rect.height) * 100;
                     elmnt.style.left = `${Math.max(0, Math.min(100, x))}%`; elmnt.style.top = `${Math.max(0, Math.min(100, y))}%`;
-                    
+
                     const dev = devicesData.find(d => d.id === id);
-                    if(dev) { 
+                    if(dev) {
                         // Cập nhật lại mảng local để không bị giật lag
                         if (currentZone === 'all') {
-                            dev.pos_x_overview = x; 
+                            dev.pos_x_overview = x;
                             dev.pos_y_overview = y;
                         } else {
-                            dev.pos_x = x; 
+                            dev.pos_x = x;
                             dev.pos_y = y;
                         }
                     }
@@ -399,7 +415,7 @@
                     // Tính trung điểm neo dựa vào tọa độ tab hiện tại
                     const devCoords = getCoords(dev);
                     const upDevCoords = getCoords(upDev);
-                    const midX = (devCoords.x + upDevCoords.x) / 2; 
+                    const midX = (devCoords.x + upDevCoords.x) / 2;
                     const midY = (devCoords.y + upDevCoords.y) / 2;
 
                     if (!dev.waypoints || !Array.isArray(dev.waypoints)) dev.waypoints = [];
@@ -417,7 +433,7 @@
         }
 
         fetchAndRenderDevices();
-        setInterval(() => { if(!isLineEditMode && !draggedNode) fetchAndRenderDevices(); }, 3000);
+        setInterval(() => { if(!isLineEditMode && !draggedNode) fetchAndRenderDevices(); }, 5000);
     </script>
 </body>
 </html>

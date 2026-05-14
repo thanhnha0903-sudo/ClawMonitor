@@ -1,0 +1,106 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 15:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "⚠️ Tài khoản hoặc mật khẩu không đúng!"
+msgstr "⚠️ Incorrect username or password!"
+
+msgid "Tên đăng nhập"
+msgstr "Username"
+
+msgid "Mật khẩu"
+msgstr "Password"
+
+msgid "ĐĂNG NHẬP"
+msgstr "LOGIN"
+
+msgid "Bản đồ NOC"
+msgstr "NOC Map"
+
+msgid "Tất cả trạng thái"
+msgstr "All Status"
+
+msgid "Chỉ Online"
+msgstr "Online Only"
+
+msgid "Chỉ Offline (Lỗi)"
+msgstr "Offline Only (Error)"
+
+msgid "Tất cả thiết bị"
+msgstr "All Devices"
+
+msgid "Camera"
+msgstr "Camera"
+
+msgid "Firewall"
+msgstr "Firewall"
+
+msgid "Core Switch"
+msgstr "Core Switch"
+
+msgid "Access Switch"
+msgstr "Access Switch"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "PC / Máy tính"
+msgstr "PC"
+
+msgid "Tên"
+msgstr "Name"
+
+msgid "Dây mạng"
+msgstr "Network Wire"
+
+msgid "Bẻ cáp"
+msgstr "Cable Bend"
+
+msgid "Đăng xuất"
+msgstr "Logout"
+
+msgid "Sơ đồ công ty"
+msgstr "Company Diagram"
+
+msgid "Bẻ cáp: BẬT"
+msgstr "Cable Bend: ON"
+
+msgid "Đang hoạt động"
+msgstr "Online"
+
+msgid "MẤT KẾT NỐI"
+msgstr "DISCONNECTED"
+
+msgid "Trạng thái:"
+msgstr "Status:"
+
+msgid "Loại/CPU/RAM:"
+msgstr "Type/CPU/RAM:"
+
+msgid "KẾT NỐI UPLINK"
+msgstr "UPLINK CONNECTION"
+
+msgid "Port Thiết bị:"
+msgstr "Device Port:"
+
+msgid "Thiết bị đích:"
+msgstr "End Device:"
+
+msgid "Cổng Uplink:"
+msgstr "Uplink Port:"

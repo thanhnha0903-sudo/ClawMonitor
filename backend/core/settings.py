@@ -1,4 +1,5 @@
 import dj_database_url
+from django.utils.translation import gettext_lazy as _
 import os
 
 """
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -99,7 +101,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'vi' # Mặc định là Tiếng Việt
+USE_I18N = True
+
+# Danh sách ngôn ngữ cho phép
+LANGUAGES = [
+    ('vi', 'Tiếng Việt'),
+    ('en', 'English'),
+]
+
+# Thư mục chứa file Từ điển (chúng ta sẽ tạo ở Bước 4)
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True

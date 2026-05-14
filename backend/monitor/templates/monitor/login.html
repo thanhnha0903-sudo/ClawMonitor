@@ -1,30 +1,122 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Đăng nhập NOC Dashboard</title>
     <style>
-        body { background-color: #1a1a1a; color: white; font-family: 'Segoe UI', Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: #222; padding: 40px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); width: 300px; text-align: center; border: 1px solid #00ffff; }
-        h2 { margin-top: 0; color: #00ffff; letter-spacing: 2px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #555; border-radius: 5px; background: #111; color: white; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #00ffff; }
-        button { width: 100%; padding: 12px; background: #00ffff; color: black; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 15px; transition: 0.2s; }
-        button:hover { background: #00cccc; box-shadow: 0 0 10px #00ffff; }
-        .error { color: #ff4d4f; font-size: 13px; margin-bottom: 10px; }
+        body { 
+            background-color: #1a1a1a; 
+            color: white; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .login-box { 
+            background: #222; 
+            padding: 40px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); 
+            width: 350px; 
+            text-align: center; 
+            position: relative; /* Để căn vị trí nút chọn ngôn ngữ */
+        }
+        h2 { 
+            margin-top: 10px; 
+            color: #00ffff; 
+            letter-spacing: 2px; 
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 1px solid #555; 
+            background: #333; 
+            color: white; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+        }
+        input:focus { 
+            border-color: #00ffff; 
+            outline: none; 
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #00ffff; 
+            color: black; 
+            border: none; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            margin-top: 10px;
+        }
+        button:hover { 
+            background: #00cccc; 
+            box-shadow: 0 0 10px #00ffff; 
+        }
+        .error { 
+            color: #ff4d4f; 
+            font-size: 13px; 
+            margin-bottom: 10px; 
+        }
+        /* Style cho Dropdown chọn ngôn ngữ */
+        .lang-selector { 
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+            margin: 0;
+        }
+        .lang-selector select { 
+            background: #333; 
+            color: #ccc; 
+            border: 1px solid #555; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 12px;
+        }
+        .lang-selector select:focus { 
+            border-color: #00ffff; 
+            outline: none;
+        }
     </style>
 </head>
 <body>
     <div class="login-box">
+        <!-- FORM CHỌN NGÔN NGỮ -->
+        <form action="{% url 'set_language' %}" method="post" class="lang-selector">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path|default:'/login/' }}">
+            <select name="language" onchange="this.form.submit()">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% for lang in LANGUAGES %}
+                    <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                        {{ lang.1 }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+
         <h2>NOC DASHBOARD</h2>
+        
         {% if form.errors %}
-        <div class="error">⚠️ Tài khoản hoặc mật khẩu không đúng!</div>
+        <div class="error">{% trans "⚠️ Tài khoản hoặc mật khẩu không đúng!" %}</div>
         {% endif %}
+        
         <form method="post">
             {% csrf_token %}
-            <input type="text" name="username" placeholder="Tên đăng nhập" required autofocus>
-            <input type="password" name="password" placeholder="Mật khẩu" required>
-            <button type="submit">ĐĂNG NHẬP</button>
+            <!-- Đã bọc trans cho Tên đăng nhập -->
+            <input type="text" name="username" placeholder="{% trans 'Tên đăng nhập' %}" required autofocus>
+            <!-- Đã bọc trans cho Mật khẩu -->
+            <input type="password" name="password" placeholder="{% trans 'Mật khẩu' %}" required>
+            <!-- Đã bọc trans cho Nút đăng nhập -->
+            <button type="submit">{% trans "ĐĂNG NHẬP" %}</button>
             <input type="hidden" name="next" value="{{ next }}">
         </form>
     </div>
